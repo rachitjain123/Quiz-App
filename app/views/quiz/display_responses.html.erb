@@ -1,0 +1,179 @@
+<% provide(:title, 'Attempted Quizes') %>
+<h1>Attempted Quizzes and their respective scores</h1>
+
+<div>
+
+
+<% arr_user={} %>
+<% respo_arr_user={} %>
+<% respo_arr_admin={} %>
+
+<% flag=[] %>
+
+<% arr3 = Array.new(100) { Array.new(7)} %>
+<% arr4 = Array.new(100) { Array.new(7)} %>
+
+<% for i in 0..99 %>
+  <% flag.push(0) %>
+  <%for k in 0..6 %>
+    <% arr3[i][k]=0 %>
+    <% arr4[i][k]=0 %>
+  <%end %>
+<%end %>
+
+
+<% @responses.each do |response| %>
+
+  <%fn=0 %>
+  <% if "Rachit" == (User.find(response.User_id )).name %>
+    <% if response.response[0] =='1' %>
+      <% fn=5 %>
+      <% arr3[response.Que_id][1]=1 %>
+    <% end %>
+    <% if response.response[0] =='2' %>
+      <%fn=5 %>
+      <% arr3[response.Que_id][2]=1 %>
+    <% end %>
+    <% if response.response[0] =='3' %>
+      <%fn=5%>
+      <% arr3[response.Que_id][3]=1 %>
+    <% end %>
+    <% if response.response[0] =='4' %>
+      <%fn=5%>
+      <% arr3[response.Que_id][4]=1 %>
+    <% end %>
+
+    <% arr3[response.Que.id][5]=fn %>
+  <%end %>
+
+  <%fn=0 %>
+
+  <% if current_user.name == (User.find(response.User_id )).name and "Rachit" != (User.find(response.User_id )).name  %>
+    <% if response.response[0] =='1' %>
+      <%fn=5%>
+      <% arr4[response.Que_id][1]=1 %>
+    <% end %>
+    <% if response.response[0] =='2' %>
+      <%fn=5%>
+      <% arr4[response.Que_id][2]=1 %>
+    <% end %>
+    <% if response.response[0] =='3' %>
+      <%fn=5%>
+      <% arr4[response.Que_id][3]=1 %>
+    <% end %>
+    <% if response.response[0] =='4' %>
+      <%fn=5%>
+      <% arr4[response.Que_id][4]=1 %>
+    <% end %>
+    <% arr4[response.Que.id][5]=fn %>
+  <%end %>
+<%end %>
+
+  <% @responses.each do |response| %>
+    <% if arr3[response.Que_id][5].to_i == 5  or current_user.name == "Rachit" %>
+      <%next%>
+    <% end %>
+    <% if current_user.name == (User.find(response.User_id )).name %>
+      <% arr_user[(QuizSet.find((Que.find(response.Que_id)).QuizSet_id)).name]=0 %>
+      <% respo_arr_user[response.response]=response.response %>
+    <%end%>
+
+    <% if "Rachit" == (User.find(response.User_id )).name %>
+      <% respo_arr_admin[response.response]=response.response %>  
+    <%end%>
+
+  <%end%>
+
+
+  <% for j in 1..50 %> 
+    <% if arr3[j][5].to_i == 0 or arr4[j][5].to_i == 0 %>
+      <% next %>
+    <%end %>
+    <% cnt=1 %>
+    <% for k in 1..4 %>
+      <% if arr4[j][k]!=arr3[j][k] %>
+        <% cnt=0 %>
+      <%end %>
+    <%end %>
+
+    <% arr_user[(QuizSet.find((Que.find(j)).QuizSet_id)).name]=arr_user[(QuizSet.find((Que.find(j)).QuizSet_id)).name].to_i+cnt.to_i%>
+  <%end %>    
+
+	<% @responses.each do |response| %>
+    <% if arr3[response.Que_id][5].to_i >1 or current_user.name=="Rachit"%>
+      <%next%>
+    <% end %>
+    <% if current_user.name == (User.find(response.User_id )).name %>
+      <% if respo_arr_admin[response.response]==respo_arr_user[response.response] %>
+
+        <% arr_user[(QuizSet.find((Que.find(response.Que_id)).QuizSet_id)).name]+=1 %>
+      <%end%>
+    <%end%>
+  <%end%>
+
+<%num =1 %>
+
+  <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Category :Sports</th>
+        <th>Score</th>
+        <th>By</th>
+      </tr> 
+    </thead>
+
+
+  <% arr_user.each do |key, value| %>
+    <tbody>
+        <% if key=="Football" or key=="Cricket" %>
+          <tr>
+          <td><%=num%></td>
+          <td><%=key%></td>
+          <td><%=value%></td>
+          <td><%=current_user.name%></td>
+          </tr>
+          <%num+=1%>
+        <% end %>
+      </tbody>
+  <%end%>    
+</table>
+<%num =1 %>
+
+  <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Category :Movies</th>
+        <th>Score</th>
+        <th>By</th>
+      </tr> 
+    </thead>
+
+
+  <% arr_user.each do |key, value| %>
+    <tbody>
+        <% if key=="Hollywood" or key=="Bollywood" %>
+          <tr>
+          <td><%=num%></td>
+          <td><%=key%></td>
+          <td><%=value%></td>
+          <td><%=current_user.name%></td>
+          </tr>
+          <%num+=1%>
+        <% end %>
+      </tbody>
+  <%end%>    
+</table>
+
+
+
+
+
+	</div>
+	
+
+
+
+</ul>
+

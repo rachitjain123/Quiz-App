@@ -1,0 +1,59 @@
+<% provide(:title, 'All quizes') %>
+<h1>All quizes</h1>
+
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+     <th>S.No</th>
+     <th>Category :Sports</th>
+     <th><a href='view_the_genre1_leaderboard'><button class="btn btn-success">View the leaderboard of Sports</button></a></th>
+   </tr>
+ </thead>
+ 
+ <%num =1 %>
+ <% @quizzes.each do |quiz| %>	
+ <% if quiz.name=="Football" or quiz.name == "Cricket" %>
+ <tbody>
+  <tr>
+    <td><%=num%></td>
+    <td><a href="quiz/<%=quiz.id%>"><%=quiz.name%></a></td>
+    <th><a href='/quiz/<%=quiz.id%>/view_the_leaderboard'><button class="btn btn-primary">View the leaderboard</button></a></th>
+  </tr>
+  <%num+=1%>
+  <%end%>
+</tbody>
+<% end %>
+</table>
+
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+     <th>S.No</th>
+     <th>Category :Movies</th>
+    <th><a href='view_the_genre2_leaderboard'><button class="btn btn-success">View the leaderboard of Movies</button></a></th>
+   </tr>
+ </thead>
+ 
+ <%num =1 %>
+ <% @quizzes.each do |quiz| %>  
+ <% if quiz.name=="Hollywood" or quiz.name == "Bollywood" %>
+ <tbody>
+  <tr>
+    <td><%=num%></td>
+    <td><a href="quiz/<%=quiz.id%>"><%=quiz.name%></a></td>
+    <th><a href='/quiz/<%=quiz.id%>/view_the_leaderboard'><button class="btn btn-primary">View the leaderboard</button></a></th>
+  </tr>
+  <%num+=1%>
+  <%end%>
+</tbody>
+<% end %>
+</table>
+
+
+
+
+
+</ul>
+

@@ -1,0 +1,66 @@
+<% provide(:title, 'All quizes') %>
+<h1>All quizes</h1>
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+     <th>S.No</th>
+     <th>Category : Sports</th>
+     <% if logged_in? && admin_user? %>
+     <th>Delete</th>
+     <%end%>
+   </tr>
+ </thead>
+ 
+ <%num =1 %>
+ <% @quizes.each do |quiz| %>	
+ <% if quiz.name =="Football" or quiz.name =="Cricket" %>
+ <tbody>
+  <tr>
+    <td><%=num%></td>
+    <td><a href="quiz/<%=quiz.id%>"><%=quiz.name%></a></td>
+    <% if logged_in? && admin_user? %>
+    <th><a data-confirm="Are you sure?" data-method="delete" href='/quiz/<%= quiz.id%>'><button class="btn btn-primary">Delete</button></a></th>
+    <%end%>
+  </tr>
+  <%num+=1%>
+  <%end%>
+</tbody>
+<%end %>
+</table>
+
+</ul>
+
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+     <th>S.No</th>
+     <th>Category : Movies</th>
+     <% if logged_in? && admin_user? %>
+     <th>Delete</th>
+     <%end%>
+   </tr>
+ </thead>
+ 
+ <%num =1 %>
+ <% @quizes.each do |quiz| %> 
+ <% if quiz.name =="Bollywood" or quiz.name =="Hollywood" %>
+ <tbody>
+  <tr>
+    <td><%=num%></td>
+    <td><a href="quiz/<%=quiz.id%>"><%=quiz.name%></a></td>
+    <% if logged_in? && admin_user? %>
+    <th><a data-confirm="Are you sure?" data-method="delete" href='/quiz/<%= quiz.id%>'><button class="btn btn-primary">Delete</button></a></th>
+    <%end%>
+  </tr>
+  <%num+=1%>
+  <%end%>
+</tbody>
+<%end %>
+</table>
+
+</ul>
+

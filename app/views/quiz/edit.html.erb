@@ -1,0 +1,15 @@
+<% provide(:title, 'Add Quiz') %>
+<h1>Add Quiz</h1>
+
+<div class="row">
+	<div class="col-md-6 col-md-offset-3">
+	<%= form_for(@quiz) do |f| %>
+		
+		<%= f.label :name %>
+		<%= f.text_field :name, class: 'form-control' %>
+
+
+		<%= f.submit "Update Quiz", class: "btn btn-primary" %>
+		<% end %>
+	</div>
+</div>

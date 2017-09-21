@@ -1,0 +1,176 @@
+<% provide(:title, @quiz.name) %>
+<h1>Leaderboard of quiz  : '<%= @quiz.name%> '</h1>
+
+
+<div>
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>User Name</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+<% arr_user={} %>
+<% respo_arr_admin={} %>
+
+<% arr1 = Array.new(100) { Array.new(100)} %>
+<% flag = Array.new(100) { Array.new(100)} %>
+
+<% arr2 = Array.new(100){Array.new(100) { Array.new(7)}} %>
+<% respo_arr_user = Array.new(100){Array.new(100)} %>
+
+<% for i in 0..99 %>
+  <%for k in 0..99 %>
+    <% arr1[i][k]=0 %>
+    <% flag[i][k]=0 %>
+    <% respo_arr_user[i][k]=0 %>
+  <%end %>
+<%end %>
+
+<% for i in 0..99 %>
+  <%for k in 0..99 %>
+    <% for j in 0..6 %>
+      <% arr2[i][k][j]=0 %>
+    <%end %>
+  <%end %>
+<%end %>
+
+<% @responses.each do |response| %>
+
+  <%fn=0 %>
+
+  <% if "Rachit" == (User.find(response.User_id )).name and @quiz.name == (QuizSet.find((Que.find(response.Que_id)).QuizSet_id)).name%>
+    <% if response.response[0] =='1' %>
+      <% fn=5 %>
+      <% arr1[response.Que_id][1]=5 %>
+    <% end %>
+    <% if response.response[0] =='2' %>
+      
+      <% fn=5 %>
+      <% arr1[response.Que_id][2]=5 %>
+    <% end %>
+    <% if response.response[0] =='3' %>
+
+      <% fn=5 %>
+      <% arr1[response.Que_id][3]=5 %>
+    <% end %>
+    <% if response.response[0] =='4' %>
+      <% fn=5 %>
+      <% arr1[response.Que_id][4]=5 %>
+    <% end %>
+    <% arr1[response.Que.id][5]=fn %>
+  <%end %>
+
+  <%fn=0 %>
+
+  <% if "Rachit" != (User.find(response.User_id )).name and @quiz.name == (QuizSet.find((Que.find(response.Que_id)).QuizSet_id)).name%>
+    <% if response.response[0] =='1' %>
+      <% fn=5 %>
+      <% arr2[response.User_id][response.Que_id][1]=5 %>
+    <% end %>
+    <% if response.response[0] =='2' %>
+      <% fn=5 %>
+      <% arr2[response.User_id][response.Que_id][2]=5 %>
+    <% end %>
+    <% if response.response[0] =='3' %>
+      <% fn=5 %>
+      <% arr2[response.User_id][response.Que_id][3]=5 %>
+    <% end %>
+    <% if response.response[0] =='4' %>
+      <% fn=5 %>
+      <% arr2[response.User_id][response.Que_id][4]=5 %>
+    <% end %>
+    <% arr2[response.User_id][response.Que.id][5]=fn %>
+  <%end %>
+
+<%end %>
+
+<%num =1 %>
+  <% @responses.each do |response| %>
+    <% if arr1[response.Que_id][5].to_i > 1 or  @quiz.name != (QuizSet.find((Que.find(response.Que_id)).QuizSet_id)).name%>
+      <%next%>
+    <% end %>
+    <% if @quiz.name == (QuizSet.find((Que.find(response.Que_id)).QuizSet_id)).name %>
+      <% if "Rachit" != (User.find(response.User_id )).name %>
+        <% arr_user[(User.find(response.User_id )).name]=0 %>
+        <% respo_arr_user[response.User_id][response.Que_id]=response.response %>
+        <% # puts(response.User_id) %>
+        <% #puts(response.Que_id) %>
+        <% #puts(response.response) %>
+      <%end%>
+    <% end %>
+  <%end %>
+
+  <% @responses.each do |response|  %>
+    <% if arr1[response.Que_id][5].to_i >1 or  @quiz.name != (QuizSet.find((Que.find(response.Que_id)).QuizSet_id)).name %>
+      <%next%>
+    <% end %>
+    <% if "Rachit" == (User.find(response.User_id )).name %>
+      <% respo_arr_admin[response.response]=response.response %>
+    <%end%>
+  <% end %>
+
+  <% for i in 1..80 %>
+    <% for j in 0..50 %> 
+      <% if arr1[j][5].to_i == 0 or arr2[i][j][5] ==0 %>
+        <% next %>
+      <%end %>
+      <% cnt=1 %>
+      <% for k in 1..4 %>
+        <% if arr2[i][j][k]!=arr1[j][k] %>
+          <% cnt=0 %>
+        <%end %>
+      <%end %>
+      <% arr_user[(User.find(i)).name]=arr_user[(User.find(i)).name].to_i+cnt.to_i %>
+    <%end %>
+  <%end %>
+
+  <% @responses.each do |response| %>
+    <% if arr1[response.Que_id][5].to_i >1 or @quiz.name != (QuizSet.find((Que.find(response.Que_id)).QuizSet_id)).name %>
+      <%next %>
+    <%end %>
+    <% if "Rachit" != (User.find(response.User_id )).name %>
+      <% for i in 0..80 %>
+        <% for j in 0..80 %>
+          <% if respo_arr_admin[response.response]!=nil and  respo_arr_admin[response.response]==respo_arr_user[i][j]%>
+            <% # puts(arr_user[(User.find(i)).name]) %>
+            <% # puts((User.find(i)).name) %>
+            <% if flag[i][j] ==0 %>
+              <% arr_user[(User.find(i)).name]+=1 %>
+              <% flag[i][j] =1 %>
+            <%end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% h2=arr_user.sort_by{|k, v| v}.reverse %>
+  
+
+  <% h2.each do |key, value| %>
+    <tbody>
+        <tr>
+        <td><%=num%></td>
+        <td><%=key%></td>
+        <td><%=value%></td>
+        </tr>
+        <%num+=1%>
+  <%end%>    
+    </tbody>
+  </table>
+
+
+
+
+
+
+  </div>
+  
+
+
+
+</ul>
+
